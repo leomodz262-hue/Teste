@@ -110,13 +110,13 @@ HIGH_SENSI_OVERRIDES = {
     "FreeLookMaxSetting": {"var_type": "float", "var_value": "9.0"}
 }
 
-ZIG_ZAG_MOVE_OVERRIDES = {
-"RunSpeed,RunSpeed,float,4.75
-"RunSpeed,RunSpeed,float,5.75
-"RunSpeed,RunSpeed,float,4.25
-"RunSpeed,RunSpeed,float,6.19
-"RunSpeed,RunSpeed,float,3.75"
-}
+ZIG_ZAG_MOVE_OVERRIDES = [
+    {"name": "RunSpeed", "var_type": "float", "var_value": "4.75"},
+    {"name": "RunSpeed", "var_type": "float", "var_value": "5.75"},
+    {"name": "RunSpeed", "var_type": "float", "var_value": "4.25"},
+    {"name": "RunSpeed", "var_type": "float", "var_value": "6.19"},
+    {"name": "RunSpeed", "var_type": "float", "var_value": "3.75"},
+]
 
 # ==================== KEEP ALIVE ====================
 def keep_alive():
