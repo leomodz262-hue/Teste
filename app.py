@@ -407,38 +407,52 @@ def api_status():
 
 @app.route('/api/toggle', methods=['POST'])
 def api_toggle():
+    """Ativa/desativa um módulo aceitando nomes antigos e novos da interface."""
     client_ip = get_client_ip()
     data = request.get_json(silent=True) or {}
-    feature = data.get('feature')
+    received_feature = str(data.get('feature', '')).strip()
     value = data.get('value')
 
+    # Normaliza maiúsculas, espaços, hífens e underscores.
+    normalized = re.sub(r'[^A-Z0-9]', '', received_feature.upper())
     feature_map = {
-        'hs_neck': 'HS_NECK',
-        'hs_chest': 'HS_CHEST',
-        'backjump_v1': 'BACKJUMPV1',
-        'high_sensi': 'HIGH_SENSI',
-        'zig_zag_move': 'ZIG_ZAG_MOVE',
-        'speed_player': 'RUN_SPEED_575',
-        'run_speed_575': 'RUN_SPEED_575',
+        'HSNECK': 'HS_NECK',
+        'HSCHEST': 'HS_CHEST',
+        'BACKJUMPV1': 'BACKJUMPV1',
+        'BACKJUMP': 'BACKJUMPV1',
+        'HIGHSENSI': 'HIGH_SENSI',
+        'SENSIALTA': 'HIGH_SENSI',
+        'ZIGZAGMOVE': 'ZIG_ZAG_MOVE',
+        'ZIGZAG': 'ZIG_ZAG_MOVE',
+        'RUNSPEED575': 'RUN_SPEED_575',
+        'SPEEDPLAYER': 'RUN_SPEED_575',
     }
 
-    config_key = feature_map.get(feature)
-    if not config_key or config_key not in DEFAULT_CONFIG:
-        return jsonify({"success": False, "error": "RECURSO INVÁLIDO"}), 400
+    config_key = feature_map.get(normalized)
+    if config_key is None:
+        app.logger.warning('Recurso inválido recebido: %r (normalizado: %r)', received_feature, normalized)
+        return jsonify({
+            'success': False,
+            'error': 'RECURSO INVÁLIDO',
+            'received': received_feature,
+        }), 400
     if not isinstance(value, bool):
-        return jsonify({"success": False, "error": "O valor precisa ser booleano"}), 400
+        return jsonify({
+            'success': False,
+            'error': 'O valor precisa ser booleano',
+        }), 400
 
     config = get_user_config(client_ip)
     config[config_key] = value
     save_data()
 
     return jsonify({
-        "success": True,
-        "ip": client_ip,
-        "feature": feature,
-        "config_key": config_key,
-        "value": value,
-        "config": config,
+        'success': True,
+        'ip': client_ip,
+        'feature': received_feature,
+        'config_key': config_key,
+        'value': value,
+        'config': config,
     })
 
 @app.route('/api/ip/check', methods=['GET'])
