@@ -518,4 +518,94 @@ LOGIN_PAGE = """<!doctype html>
 
 ADMIN_DASHBOARD = """<!doctype html>
 <html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LARY MODZ PROXY · ADMIN</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"><style>
-:root{--bg:#0b0a0f;--panel:#16131c;--line:#2e2535;--muted:#a08fa8;--ink:#f5f3f7;--lime:#ff2d95}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif}.admin{min-height:100vh;display:grid;grid-template-columns:230px 1fr}.nav{padding:28px 20px;background:#121018;border-right:1px solid var(--line)}.brand{font-weight:900;letter-spacing:2px}.brand span{color:var(--lime)}.nav-links{margin-top:58px;display:grid;gap:7px}.nav-links a{padding:13px;color:var(--muted);text-decoration:none;font:700 10px monospace;letter-spacing:1px;text-transform:uppercase}.nav-links a.active,.nav-links a:hover{background:var(--lime);color:#1a0a12}.logout{display:block;margin-top:60px;color:#ff9a9a;text-decoration:none;font:700 10px monospace;letter-spacing:1px}.workspace{padding:34px 42px;max-width:1250px;width:100%}.bar{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid var(--line);padding-bottom:28px}.bar h1{font-size:38px;letter-spacing:-2px;margin:8px 0 0}.eyebrow{font:700 10px monospace;letter-spacing:2px;color:var(--lime)}.profile{color:var(--muted);font:11px monospace}.cards{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-top:24px}.card{background:var(--panel);border:1px solid var(--line);padding:24px}.card h2{font-size:14px;margin:0 0 20px}.field{margin:14px 0}.field label{display:block;color:var(--muted);font:700 10px monospace;letter-spacing:1px;margin-bottom:7px}.field input{width:100%;padding:13px;background:#0d0b12;border:1px solid var(--line);color:#fff;font:inherit;outline:none}.field input:focus{border-color:var(--lime)}button{padding:13px 18px;border:0;background:var(--lime);color:#1a0a12;font-weight:900;letter-spacing:1px;cursor:pointer}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{padding:18px;background:#121018;border:1px solid var(--line)}.stat small{display:block;color:var(--muted);font:700 9px monospace;letter-spacing:1px}.stat strong{display:block;font-size:32px;margin-top:12px}.wide{margin-top:16px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:12px}th,td{text-align:left;padding:14px 10px;border-bottom:1px solid var(--line)}th{color:var(--muted);font:700 9px monospace;letter-spacing:1px}td{color:#c8b9d0}.badge{padding:5px 8px;background:#3a1a2e;color:var(--lime);font:700 10px monospace}.danger{background:#492326;color:#ffaaaa;font-size:10px;padding:8px 10px}.generated{margin-top:15px;color:var(--lime);font:800 16px monospace;word-break:break-all}@media(max-width:780px){.admin{grid-template-columns:1fr}.nav{border-right:0;border-bottom:1px solid var(--line);padding:18px 14px}.nav-links{margin-top:20px;grid-template-columns:repeat(3,1fr);gap:5px}.nav-links a{min-height:44px;display:flex;align-items:center;
+:root{--bg:#0b0a0f;--panel:#16131c;--line:#2e2535;--muted:#a08fa8;--ink:#f5f3f7;--lime:#ff2d95}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif}.admin{min-height:100vh;display:grid;grid-template-columns:230px 1fr}.nav{padding:28px 20px;background:#121018;border-right:1px solid var(--line)}.brand{font-weight:900;letter-spacing:2px}.brand span{color:var(--lime)}.nav-links{margin-top:58px;display:grid;gap:7px}.nav-links a{padding:13px;color:var(--muted);text-decoration:none;font:700 10px monospace;letter-spacing:1px;text-transform:uppercase}.nav-links a.active,.nav-links a:hover{background:var(--lime);color:#1a0a12}.logout{display:block;margin-top:60px;color:#ff9a9a;text-decoration:none;font:700 10px monospace;letter-spacing:1px}.workspace{padding:34px 42px;max-width:1250px;width:100%}.bar{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid var(--line);padding-bottom:28px}.bar h1{font-size:38px;letter-spacing:-2px;margin:8px 0 0}.eyebrow{font:700 10px monospace;letter-spacing:2px;color:var(--lime)}.profile{color:var(--muted);font:11px monospace}.cards{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-top:24px}.card{background:var(--panel);border:1px solid var(--line);padding:24px}.card h2{font-size:14px;margin:0 0 20px}.field{margin:14px 0}.field label{display:block;color:var(--muted);font:700 10px monospace;letter-spacing:1px;margin-bottom:7px}.field input{width:100%;padding:13px;background:#0d0b12;border:1px solid var(--line);color:#fff;font:inherit;outline:none}.field input:focus{border-color:var(--lime)}button{padding:13px 18px;border:0;background:var(--lime);color:#1a0a12;font-weight:900;letter-spacing:1px;cursor:pointer}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{padding:18px;background:#121018;border:1px solid var(--line)}.stat small{display:block;color:var(--muted);font:700 9px monospace;letter-spacing:1px}.stat strong{display:block;font-size:32px;margin-top:12px}.wide{margin-top:16px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:12px}th,td{text-align:left;padding:14px 10px;border-bottom:1px solid var(--line)}th{color:var(--muted);font:700 9px monospace;letter-spacing:1px}td{color:#c8b9d0}.badge{padding:5px 8px;background:#3a1a2e;color:var(--lime);font:700 10px monospace}.danger{background:#492326;color:#ffaaaa;font-size:10px;padding:8px 10px}.generated{margin-top:15px;color:var(--lime);font:800 16px monospace;word-break:break-all}@media(max-width:780px){.admin{grid-template-columns:1fr}.nav{border-right:0;border-bottom:1px solid var(--line);padding:18px 14px}.nav-links{margin-top:20px;grid-template-columns:repeat(3,1fr);gap:5px}.nav-links a{min-height:44px;display:flex;align-items:center;justify-content:center;font-size:9px}.logout{margin-top:20px}.workspace{padding:22px 16px}.bar h1{font-size:28px}.cards{grid-template-columns:1fr}}
+</style></head><body>
+<div class="admin">
+  <nav class="nav">
+    <div class="brand">LARY <span>MODZ</span></div>
+    <div class="nav-links">
+      <a href="/admin" class="active">Dashboard</a>
+      <a href="/admin/keys">Keys</a>
+      <a href="/admin/sessions">Sessões</a>
+    </div>
+    <a href="/admin/logout" class="logout"><i class="fa-solid fa-right-from-bracket"></i> SAIR</a>
+  </nav>
+  <main class="workspace">
+    <div class="bar">
+      <div>
+        <div class="eyebrow">ADMIN CONSOLE</div>
+        <h1>Dashboard</h1>
+      </div>
+      <div class="profile">{{ username or "operator" }}</div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h2>Gerar nova key</h2>
+        <form method="POST" action="/admin/generate">
+          <div class="field">
+            <label>Duração (dias)</label>
+            <input type="number" name="days" value="30" min="1" required>
+          </div>
+          <div class="field">
+            <label>Nota (opcional)</label>
+            <input type="text" name="note" placeholder="ex: cliente X">
+          </div>
+          <button type="submit">Gerar Key</button>
+        </form>
+        {% if generated_key %}
+        <div class="generated">{{ generated_key }}</div>
+        {% endif %}
+      </div>
+
+      <div class="card">
+        <h2>Estatísticas</h2>
+        <div class="stats">
+          <div class="stat">
+            <small>KEYS ATIVAS</small>
+            <strong>{{ total_keys or 0 }}</strong>
+          </div>
+          <div class="stat">
+            <small>SESSÕES</small>
+            <strong>{{ total_sessions or 0 }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card wide">
+      <h2>Keys recentes</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Key</th>
+              <th>Expira</th>
+              <th>Nota</th>
+              <th>Status</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for key in keys %}
+            <tr>
+              <td><code>{{ key.key[:12] }}...</code></td>
+              <td>{{ key.expires }}</td>
+              <td>{{ key.note or "-" }}</td>
+              <td><span class="badge">{{ key.status }}</span></td>
+              <td>
+                <form method="POST" action="/admin/revoke/{{ key.id }}" style="display:inline">
+                  <button type="submit" class="danger">Revogar</button>
+                </form>
+              </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5">Nenhuma key encontrada</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+</body></html>"""
