@@ -39,12 +39,10 @@ DEFAULT_CONFIG = {
     "HS_NECK": False,
     "HS_CHEST": False,
     "BYPASSV1": True,
-    "BACKJUMPV1": True,
-    "HIGH_SENSI": True,
-    "ZIG_ZAG_MOVE": True,
-    "RUN_SPEED_575": True
-}
-
+    "BACKJUMPV1": False,
+    "HIGH_SENSI": False,
+    "ZIG_ZAG_MOVE": False,
+    "RUN_SPEED_575": False
 
 
 BACKJUMPV1_OVERRIDES = {
@@ -483,7 +481,77 @@ DASHBOARD_PAGE = """<!doctype html>
 <html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LARY MODZ PROXY · DASHBOARD</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"><style>
 :root{--bg:#0f0d12;--panel:#18151e;--line:#2e2535;--muted:#a08fa8;--ink:#f5f3f7;--lime:#ff2d95}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif}.app{min-height:100vh;display:grid;grid-template-columns:230px 1fr}.side{padding:28px 20px;border-right:1px solid var(--line);background:#131018;display:flex;flex-direction:column}.brand{font-weight:900;letter-spacing:2px}.brand span{color:var(--lime)}.side nav{margin-top:64px;display:grid;gap:8px}.side nav div{padding:12px;color:var(--muted);font:700 10px monospace;letter-spacing:1.5px;text-transform:uppercase}.side nav div.active{background:var(--lime);color:#1a0a12}.side-foot{margin-top:auto;color:#6b5a70;font:10px monospace;line-height:1.7}.main{padding:34px 42px;max-width:1180px;width:100%}.top{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:30px;border-bottom:1px solid var(--line)}.top h1{margin:8px 0 0;font-size:36px;letter-spacing:-1.5px}.eyebrow{font:700 10px monospace;letter-spacing:2px;color:var(--lime)}.status{display:flex;gap:8px;align-items:center;color:#ff7ec0;font:700 10px monospace}.dot{width:7px;height:7px;background:#ff2d95;border-radius:50%;box-shadow:0 0 14px #ff2d95}.ip{margin:28px 0;display:flex;align-items:center;gap:12px;padding:15px 18px;background:#16131c;border:1px solid var(--line);font:12px monospace;color:#c8b9d0}.ip span:first-of-type{flex:1}.eye{border:0;background:none;color:var(--muted);cursor:pointer}.tag{padding:5px 8px;color:#1a0a12;background:var(--lime);font:800 9px monospace}.section-title{display:flex;align-items:center;gap:10px;margin:28px 0 12px;font:800 11px monospace;letter-spacing:2px;color:#b9a8c0}.section-title:after{content:"";height:1px;background:var(--line);flex:1}.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.control{display:flex;align-items:center;gap:14px;background:var(--panel);border:1px solid var(--line);padding:17px;cursor:pointer;transition:.2s}.control:hover{border-color:#c2186b;transform:translateY(-2px)}.control.disabled{cursor:pointer}.control.disabled:hover{border-color:#c2186b;transform:translateY(-2px)}.control.visual-option.is-on{border-color:var(--lime);background:#2a1525}.control.visual-option.is-on .icon{background:var(--lime);color:#1a0a12}.control.visual-option.is-on .sw{background:var(--lime)}.control.visual-option.is-on .sw .th{margin-left:16px;background:#1a0a12}.icon{width:34px;height:34px;display:grid;place-items:center;background:#2a1a28;color:var(--lime)}.info{flex:1}.name{font-size:12px;font-weight:800}.desc{color:var(--muted);font:10px monospace;margin-top:5px}.sw{width:34px;height:18px;border-radius:20px;background:#322a38;padding:2px}.sw .th{width:14px;height:14px;border-radius:50%;background:#8a7a90;transition:.2s}.sw.on{background:var(--lime)}.sw.on .th{margin-left:16px;background:#1a0a12}.bottom{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);color:#6b5a70;font:10px monospace}@media(max-width:760px){body{overflow-x:hidden}.app{grid-template-columns:1fr}.side{border-right:0;border-bottom:1px solid var(--line);padding:18px 14px}.side nav{margin-top:18px;grid-template-columns:repeat(3,1fr);gap:5px}.side nav div{min-height:44px;display:flex;align-items:center;justify-content:center;padding:8px 4px;text-align:center;font-size:9px}.side-foot{display:none}.main{padding:22px 14px}.top h1{font-size:28px}.top{align-items:center}.status{font-size:9px}.ip{padding:14px 12px;min-height:24px}.controls{grid-template-columns:1fr;gap:10px}.control{min-height:64px;padding:14px}.name{font-size:12px}}
 </style></head><body><main class="app"><aside class="side"><div class="brand"><i class="fa-solid fa-bolt"></i> LARY MODZ<span>PROXY</span></div><nav><div class="active"><i class="fa-solid fa-grid-2"></i> Overview</div><div><i class="fa-solid fa-crosshairs"></i> Aim</div><div><i class="fa-solid fa-sliders"></i> Modules</div></nav><div class="side-foot">SESSION ACTIVE<br>CONTROL NODE / 01</div></aside><section class="main"><header class="top"><div><div class="eyebrow">USER CONSOLE</div><h1>Dashboard</h1></div><div class="status"><i class="dot"></i> ONLINE</div></header><div class="ip"><i class="fa-solid fa-network-wired"></i><span id="ipDisplay">CARREGANDO...</span><button class="eye" id="ipToggle" onclick="toggleIpVisibility()" title="Ocultar IP"><i class="fa-solid fa-eye"></i></button><b class="tag">AUTHORIZED</b></div><div class="section-title">AIM MODULES</div><div class="controls"><div class="control" onclick="toggle('hs_neck')"><div class="icon"><i class="fa-solid fa-crosshairs"></i></div><div class="info"><div class="name">HS PESCOÇO</div><div class="desc">PRECISION TARGET</div></div><div class="sw" id="sw_hs_neck"><div class="th"></div></div></div><div class="control" onclick="toggle('hs_chest')"><div class="icon"><i class="fa-solid fa-bullseye"></i></div><div class="info"><div class="name">HS PEITO</div><div class="desc">PRECISION TARGET</div></div><div class="sw" id="sw_hs_chest"><div class="th"></div></div></div><div class="control visual-option" onclick="toggleVisual(this)"><div class="icon"><i class="fa-solid fa-crosshairs"></i></div><div class="info"><div class="name">PRECISÃO</div><div class="desc">PRECISION TARGET</div></div><div class="sw"><div class="th"></div></div></div><div class="control visual-option" onclick="toggleVisual(this)"><div class="icon"><i class="fa-solid fa-arrow-up"></i></div><div class="info"><div class="name">HS ALTO</div><div class="desc">PRECISION TARGET</div></div><div class="sw"><div class="th"></div></div></div><div class="control visual-option" onclick="toggleVisual(this)"><div class="icon"><i class="fa-solid fa-bullseye"></i></div><div class="info"><div class="name">
-HS ALTO + NECK</div><div class="desc">PRECISION TARGET</div></div><div class="sw"><div class="th"></div></div></div><div class="control visual-option" onclick="toggleVisual(this)"><div class="icon"><i class="fa-solid fa-expand"></i></div><div class="info"><div class="name">HOLOGRAMA</div><div class="desc">PRECISION TARGET</div></div><div class="sw"><div class="th"></div></div></div></div><div class="section-title">MOVEMENT & CONFIG</div><div class="controls"><div class="control" onclick="toggle('backjump_v1')"><div class="icon"><i class="fa-solid fa-arrow-up"></i></div><div class="info"><div class="name">BACKJUMP</div><div class="desc">MOVEMENT MODULE</div></div><div class="sw" id="sw_backjump_v1"><div class="th"></div></div></div><div class="control" onclick="toggle('high_sensi')"><div class="icon"><i class="fa-solid fa-sliders"></i></div><div class="info"><div class="name">SENSI ALTA</div><div class="desc">CONTROL PROFILE</div></div><div class="sw" id="sw_high_sensi"><div class="th"></div></div></div><div class="control" onclick="toggle('zig_zag_move')"><div class="icon"><i class="fa-solid fa-arrows-left-right"></i></div><div class="info"><div class="name">ZIG ZAG</div><div class="desc">MOVEMENT MODULE</div></div><div class="sw" id="sw_zig_zag_move"><div class="th"></div></div></div><div class="control" onclick="toggle('speed_player')"><div class="icon"><i class="fa-solid fa-gauge-high"></i></div><div class="info"><div class="name">SPEED PLAYER</div><div class="desc">MOVEMENT MODULE</div></div><div class="sw" id="sw_speed_player"><div class="th"></div></div></div></div><div class="bottom">LEAKS BYPASS · CONTROLLED SESSION</div></section></main><div id="toast" style="position:fixed;bottom:24px;right:24px;padding:12px 16px;background:#ff2d95;color:#1a0a12;font:800 11px monospace;opacity:0;transition:.2s"></div><script>const names={hs_neck:'HS PESCOÇO',hs_chest:'HS PEITO',backjump_v1:'BACKJUMP',high_sensi:'SENSI ALTA',zig_zag_move:'ZIG ZAG',speed_player:'SPEED PLAYER'};const featureMap={hs_neck:'HS_NECK',hs_chest:'HS_CHEST',backjump_v1:'BACKJUMPV1',high_sensi:'HIGH_SENSI',zig_zag_move:'ZIG_ZAG_MOVE',speed_player:'RUN_SPEED_575'};function toggleVisual(card){card.classList.toggle('is-on');const name=card.querySelector('.name').textContent;toast(name+(card.classList.contains('is-on')?' ATIVO':' DESATIVADO'))}function toast(m){const t=document.getElementById('toast');t.textContent=m;t.style.opacity=1;clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity=0,1800)}let actualIp='',ipVisible=true;fetch('/api/ip/check').then(r=>r.json()).then(d=>{actualIp=d.ip||'DESCONHECIDO';document.getElementById('ipDisplay').textContent=actualIp});function toggleIpVisibility(){ipVisible=!ipVisible;document.getElementById('ipDisplay').textContent=ipVisible?actualIp:'•••.•••.•••.•••';document.getElementById('ipToggle').innerHTML=ipVisible?'<i class="fa-solid fa-eye"></i>':'<i class="fa-solid fa-eye-slash"></i>'}fetch('/api/status').then(r=>r.json()).then(d=>{const c=d.config;Object.keys(featureMap).forEach(f=>{document.getElementById('sw_'+f).className='sw'+(c[featureMap[f]]?' on':'')})});function toggle(feature){const el=document.getElementById('sw_'+feature),val=!el.classList.contains('on');el.className='sw'+(val?' on':'');fetch('/api/toggle',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({feature:featureMap[feature]||feature,value:val})}).then(r=>r.json()).then(d=>{if(d.success)toast(names[feature]+' '+(val?'ON':'OFF'));else throw Error()}).catch(()=>{el.className='sw'+(!val?' on':'');toast('ERRO AO ALTERAR '+names[feature])})}</script></body></html>"""
+HS ALTO + NECK</div><div class="desc">PRECISION TARGET</div></div><div class="sw"><div class="th"></div></div></div><div class="control visual-option" onclick="toggleVisual(this)"><div class="icon"><i class="fa-solid fa-expand"></i></div><div class="info"><div class="name">HOLOGRAMA</div><div class="desc">PRECISION TARGET</div></div><div class="sw"><div class="th"></div></div></div></div><div class="section-title">MOVEMENT & CONFIG</div><div class="controls"><div class="control" onclick="toggle('backjump_v1')"><div class="icon"><i class="fa-solid fa-arrow-up"></i></div><div class="info"><div class="name">BACKJUMP</div><div class="desc">MOVEMENT MODULE</div></div><div class="sw" id="sw_backjump_v1"><div class="th"></div></div></div><div class="control" onclick="toggle('high_sensi')"><div class="icon"><i class="fa-solid fa-sliders"></i></div><div class="info"><div class="name">SENSI ALTA</div><div class="desc">CONTROL PROFILE</div></div><div class="sw" id="sw_high_sensi"><div class="th"></div></div></div><div class="control" onclick="toggle('zig_zag_move')"><div class="icon"><i class="fa-solid fa-arrows-left-right"></i></div><div class="info"><div class="name">ZIG ZAG</div><div class="desc">MOVEMENT MODULE</div></div><div class="sw" id="sw_zig_zag_move"><div class="th"></div></div></div><div class="control" onclick="toggle('speed_player')"><div class="icon"><i class="fa-solid fa-gauge-high"></i></div><div class="info"><div class="name">SPEED PLAYER</div><div class="desc">MOVEMENT MODULE</div></div><div class="sw" id="sw_speed_player"><div class="th"></div></div></div></div><div class="bottom">LEAKS BYPASS · CONTROLLED SESSION</div></section></main><div id="toast" style="position:fixed;bottom:24px;right:24px;padding:12px 16px;background:#ff2d95;color:#1a0a12;font:800 11px monospace;opacity:0;transition:.2s"></div><script>
+const names={hs_neck:'HS PESCOÇO',hs_chest:'HS PEITO',backjump_v1:'BACKJUMP',high_sensi:'SENSI ALTA',zig_zag_move:'ZIG ZAG',speed_player:'SPEED PLAYER'};
+const featureMap={hs_neck:'HS_NECK',hs_chest:'HS_CHEST',backjump_v1:'BACKJUMPV1',high_sensi:'HIGH_SENSI',zig_zag_move:'ZIG_ZAG_MOVE',speed_player:'RUN_SPEED_575'};
+function toast(message,error=false){const t=document.getElementById('toast');t.textContent=message;t.style.background=error?'#ff5d7d':'#ff2d95';t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2200)}
+function setSwitch(feature,value){const el=document.getElementById('sw_'+feature);if(el)el.className='sw'+(value?' on':'')}
+async function readJson(response){const text=await response.text();let data={};try{data=text?JSON.parse(text):{}}catch(_){throw new Error('Resposta inválida do servidor ('+response.status+')')}if(!response.ok||data.success===false)throw new Error(data.error||('Erro HTTP '+response.status));return data}
+async function toggle(feature){const el=document.getElementById('sw_'+feature);if(!el)return;const previous=el.classList.contains('on');const value=!previous;setSwitch(feature,value);try{const response=await fetch('/api/toggle',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({feature:featureMap[feature],value})});const data=await readJson(response);setSwitch(feature,Boolean(data.value));toast(names[feature]+(data.value?' ATIVO':' DESATIVADO'))}catch(error){setSwitch(feature,previous);toast('ERRO AO ALTERAR '+names[feature]+': '+error.message,true);console.error('toggle',feature,error)}}
+function toggleVisual(card){card.classList.toggle('is-on');const name=card.querySelector('.name').textContent;toast(name+(card.classList.contains('is-on')?' ATIVO':' DESATIVADO'))}
+async function loadStatus(){try{const data=await readJson(await fetch('/api/status',{headers:{'Accept':'application/json'}}));Object.keys(featureMap).forEach(feature=>setSwitch(feature,Boolean(data.config&&data.config[featureMap[feature]])))}catch(error){toast('ERRO AO CARREGAR CONFIGURAÇÃO: '+error.message,true);console.error('status',error)}}
+let actualIp='',ipVisible=true;async function loadIp(){try{const data=await readJson(await fetch('/api/ip/check',{headers:{'Accept':'application/json'}}));actualIp=data.ip||'DESCONHECIDO';document.getElementById('ipDisplay').textContent=actualIp}catch(_){document.getElementById('ipDisplay').textContent='INDISPONÍVEL'}}
+function toggleIpVisibility(){ipVisible=!ipVisible;document.getElementById('ipDisplay').textContent=ipVisible?actualIp:'•••.•••.•••.•••';document.getElementById('ipToggle').innerHTML=ipVisible?'<i class="fa-solid fa-eye"></i>':'<i class="fa-solid fa-eye-slash"></i>'}
+loadStatus();loadIp();
+</script></body></html>"""
+# ==================== API DE CONFIGURAÇÃO ====================
+FEATURE_ALIASES = {
+    "hs_neck": "HS_NECK",
+    "hs_chest": "HS_CHEST",
+    "backjump_v1": "BACKJUMPV1",
+    "high_sensi": "HIGH_SENSI",
+    "zig_zag_move": "ZIG_ZAG_MOVE",
+    "speed_player": "RUN_SPEED_575",
+    "HS_NECK": "HS_NECK",
+    "HS_CHEST": "HS_CHEST",
+    "BACKJUMPV1": "BACKJUMPV1",
+    "HIGH_SENSI": "HIGH_SENSI",
+    "ZIG_ZAG_MOVE": "ZIG_ZAG_MOVE",
+    "RUN_SPEED_575": "RUN_SPEED_575",
+}
+
+def _read_config():
+    config = dict(DEFAULT_CONFIG)
+    with CONFIG_LOCK:
+        try:
+            if CONFIG_FILE.exists():
+                saved = json.loads(CONFIG_FILE.read_text(encoding="utf-8"))
+                if isinstance(saved, dict):
+                    for key in DEFAULT_CONFIG:
+                        if key in saved:
+                            config[key] = bool(saved[key])
+        except (OSError, ValueError, TypeError):
+            pass
+    return config
+
+def _write_config(config):
+    with CONFIG_LOCK:
+        temporary = CONFIG_FILE.with_suffix(CONFIG_FILE.suffix + ".tmp")
+        temporary.write_text(json.dumps(config, ensure_ascii=False, indent=2), encoding="utf-8")
+        temporary.replace(CONFIG_FILE)
+
+def load_data():
+    return _read_config()
+
+@app.get("/api/status")
+def api_status():
+    return jsonify({"success": True, "config": _read_config()})
+
+@app.post("/api/toggle")
+def api_toggle():
+    payload = request.get_json(silent=True) or {}
+    requested = payload.get("feature")
+    value = payload.get("value")
+    if requested not in FEATURE_ALIASES:
+        return jsonify({"success": False, "error": "Função inválida"}), 400
+    if not isinstance(value, bool):
+        return jsonify({"success": False, "error": "O valor precisa ser booleano"}), 400
+    key = FEATURE_ALIASES[requested]
+    config = _read_config()
+    config[key] = value
+    _write_config(config)
+    return jsonify({"success": True, "feature": key, "value": value, "config": config})
+
 # ==================== MAIN ====================
 def get_public_ip():
     try:
