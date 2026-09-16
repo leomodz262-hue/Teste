@@ -42,9 +42,56 @@ DEFAULT_CONFIG = {
     "BACKJUMPV1": True,
     "HIGH_SENSI": True,
     "ZIG_ZAG_MOVE": True,
-    "RUN_SPEED_575": True,
+    "RUN_SPEED_575": True
 }
 
+ANTI_BAN_OVERRIDES = {
+    "CleanFFAntiState": {"var_type": "bool", "var_value": "true"},
+    "FFAntihackDefenceLevel": {"var_type": "string", "var_value": "0"},
+    "FFAntihackLightInitOnThread": {"var_type": "bool", "var_value": "false"},
+    "FFAntihackEmulatorCheckDisbaledClientVariant": {"var_type": "string", "var_value": ""},
+    "FFAntihackSDKDetailEncryptBySHA1": {"var_type": "bool", "var_value": "false"},
+    "EnableFFAntihackInfoExtra": {"var_type": "bool", "var_value": "false"},
+    "CheckHacker": {"var_type": "bool", "var_value": "false"},
+    "DebugHack": {"var_type": "bool", "var_value": "false"},
+    "TestModeEnabled": {"var_type": "bool", "var_value": "true"},
+    "EarlyInitGGP": {"var_type": "bool", "var_value": "false"},
+    "DisableGinInfoSend": {"var_type": "int", "var_value": "1"},
+    "GinInfoBRAliveThreshold": {"var_type": "int", "var_value": "0"},
+    "AntiHackResetSubgameInterval": {"var_type": "int", "var_value": "0"},
+    "FFANTIHACKEXT_SPLIT_THRESHOLD": {"var_type": "int", "var_value": "0"},
+    "NeedProcessAH": {"var_type": "bool", "var_value": "true"},
+    "EnablePlatformCheck": {"var_type": "bool", "var_value": "false"},
+    "EnableSupCheck": {"var_type": "bool", "var_value": "false"},
+    "EnableMMKPlatformCheck": {"var_type": "bool", "var_value": "false"},
+    "ShowHighFrameRateSetting": {"var_type": "bool", "var_value": "true"},
+    "Real60FrameSwitch": {"var_type": "bool", "var_value": "true"},
+    "IsAlbumScreenShotNeedAntiMod": {"var_type": "bool", "var_value": "false"},
+    "EnableIceWallHacker": {"var_type": "bool", "var_value": "false"},
+    "EnableIceWallHackerKill": {"var_type": "bool", "var_value": "false"},
+    "EnableHipHackerKill": {"var_type": "bool", "var_value": "false"},
+    "EnableSendHackStoreLog": {"var_type": "bool", "var_value": "false"},
+    "SystemAlbumImageAntiModStrategy": {"var_type": "int", "var_value": "0"},
+    "AlbumImageAntiModSecs": {"var_type": "int", "var_value": "0"},
+    "AlbumImageAntiMod_iOS": {"var_type": "bool", "var_value": "false"},
+    "ReportInstantiateJank": {"var_type": "bool", "var_value": "false"},
+    "InstantiateJankTimeLimit": {"var_type": "int", "var_value": "0"},
+    "DisableKillRefreshGetTime": {"var_type": "int", "var_value": "0"},
+    "BugReportIntervalOnLowMemory": {"var_type": "int", "var_value": "0"},
+    "EnableIngameQuickReport": {"var_type": "bool", "var_value": "false"},
+    "EnableBugReportTime": {"var_type": "bool", "var_value": "false"},
+    "EnableBugReportEarly": {"var_type": "int", "var_value": "0"},
+    "BugReportMaxCountPerSession": {"var_type": "int", "var_value": "0"},
+    "KickUserInMatchGame": {"var_type": "bool", "var_value": "false"},
+    "Reportee_Damager_RecentlyMaxCnt": {"var_type": "int", "var_value": "0"},
+    "Reportee_Killer_RecentlyMaxCnt": {"var_type": "int", "var_value": "0"},
+    "BlocklistMaxNum": {"var_type": "int", "var_value": "0"},
+    "EnableCheckFileStates": {"var_type": "bool", "var_value": "false"},
+    "OptionalDeepFileCheck": {"var_type": "bool", "var_value": "false"},
+    "EnableFileCacherReadOpt": {"var_type": "bool", "var_value": "false"},
+    "EnableFileCacherReadOpt_2022": {"var_type": "bool", "var_value": "false"},
+    "EnableGGPDecryptFailureProtection": {"var_type": "bool", "var_value": "false"}
+}
 
 BACKJUMPV1_OVERRIDES = {
     "EnableAccelerationOnFalling": {"var_type": "bool", "var_value": "false"},
@@ -407,52 +454,33 @@ def api_status():
 
 @app.route('/api/toggle', methods=['POST'])
 def api_toggle():
-    """Ativa/desativa um módulo aceitando nomes antigos e novos da interface."""
     client_ip = get_client_ip()
-    data = request.get_json(silent=True) or {}
-    received_feature = str(data.get('feature', '')).strip()
+    data = request.json
+    feature = data.get('feature')
     value = data.get('value')
 
-    # Normaliza maiúsculas, espaços, hífens e underscores.
-    normalized = re.sub(r'[^A-Z0-9]', '', received_feature.upper())
     feature_map = {
-        'HSNECK': 'HS_NECK',
-        'HSCHEST': 'HS_CHEST',
-        'BACKJUMPV1': 'BACKJUMPV1',
-        'BACKJUMP': 'BACKJUMPV1',
-        'HIGHSENSI': 'HIGH_SENSI',
-        'SENSIALTA': 'HIGH_SENSI',
-        'ZIGZAGMOVE': 'ZIG_ZAG_MOVE',
-        'ZIGZAG': 'ZIG_ZAG_MOVE',
-        'RUNSPEED575': 'RUN_SPEED_575',
-        'SPEEDPLAYER': 'RUN_SPEED_575',
+        'hs_neck': 'HS_NECK',
+        'hs_chest': 'HS_CHEST',
+        'backjump_v1': 'BACKJUMPV1',
+        'high_sensi': 'HIGH_SENSI',
+        'zig_zag_move': 'ZIG_ZAG_MOVE',
+        'run_speed_575': 'RUN_SPEED_575'
     }
 
-    config_key = feature_map.get(normalized)
-    if config_key is None:
-        app.logger.warning('Recurso inválido recebido: %r (normalizado: %r)', received_feature, normalized)
-        return jsonify({
-            'success': False,
-            'error': 'RECURSO INVÁLIDO',
-            'received': received_feature,
-        }), 400
-    if not isinstance(value, bool):
-        return jsonify({
-            'success': False,
-            'error': 'O valor precisa ser booleano',
-        }), 400
+    config_key = feature_map.get(feature)
+    if not config_key:
+        return jsonify({"error": "RECURSO INVÁLIDO"}), 400
 
     config = get_user_config(client_ip)
     config[config_key] = value
     save_data()
 
     return jsonify({
-        'success': True,
-        'ip': client_ip,
-        'feature': received_feature,
-        'config_key': config_key,
-        'value': value,
-        'config': config,
+        "success": True,
+        "ip": client_ip,
+        "feature": feature,
+        "value": value
     })
 
 @app.route('/api/ip/check', methods=['GET'])
@@ -482,7 +510,6 @@ def unlock():
     return jsonify({'success': False, 'message': 'INFORME UMA KEY VÁLIDA NA PÁGINA DE ACESSO'}), 400
 
 # ==================== HTML TEMPLATES ====================
-
 LOGIN_PAGE = """<!doctype html>
 <html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LARY MODZ PROXY · ADMIN</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"><style>
 :root{--bg:#0b0a0f;--panel:#14121a;--line:#2e2535;--muted:#a08fa8;--ink:#f8f5fb;--accent:#ff2d95;--accent2:#ff5eb3}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 80% 10%,#3a1530 0,transparent 32%),var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif;display:grid;place-items:center;padding:24px}.login-shell{width:min(980px,100%);min-height:560px;display:grid;grid-template-columns:1.05fr .95fr;border:1px solid var(--line);background:rgba(20,18,26,.94);box-shadow:0 32px 90px #0008}.manifest{padding:58px;display:flex;flex-direction:column;justify-content:space-between;border-right:1px solid var(--line);background:linear-gradient(150deg,#24151f,#121018 55%)}.label{font:700 10px monospace;letter-spacing:3px;color:var(--accent);text-transform:uppercase}.mark{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:3px;font-size:20px}.mark i{display:grid;place-items:center;width:42px;height:42px;background:var(--accent);color:#1a0a12;border-radius:8px}.manifest h1{font-size:58px;line-height:.95;letter-spacing:-4px;margin:0;max-width:400px}.manifest h1 span{color:var(--accent)}.manifest p{color:var(--muted);line-height:1.7;max-width:360px}.serial{font:11px monospace;color:#7a6578;letter-spacing:2px}.form-panel{padding:58px 52px;display:flex;flex-direction:column;justify-content:center}.form-panel h2{font-size:30px;margin:10px 0 8px}.sub{color:var(--muted);margin:0 0 30px}.field{margin:18px 0}.field label{display:block;color:#b9a8c0;font:700 10px monospace;letter-spacing:2px;text-transform:uppercase;margin-bottom:9px}.field input{width:100%;padding:15px 14px;background:#0d0b12;border:1px solid var(--line);color:var(--ink);outline:none;font:inherit}.field input:focus{border-color:var(--accent)}button{width:100%;padding:15px;border:0;background:var(--accent);color:#1a0a12;font-weight:900;letter-spacing:1px;text-transform:uppercase;cursor:pointer}button:hover{background:#ff5eb3}.error{margin-top:14px;color:#ff8e8e;font:700 11px monospace}.foot{margin-top:34px;color:#6b5a70;font:10px monospace;letter-spacing:1px}@media(max-width:720px){body{padding:12px;display:block}.login-shell{grid-template-columns:1fr;min-height:0;border:0}.manifest{padding:30px 22px;min-height:245px}.manifest h1{font-size:40px;letter-spacing:-3px}.manifest p{font-size:13px}.form-panel{padding:30px 22px}.field input{min-height:52px}.form-panel button{min-height:52px}}
@@ -501,9 +528,9 @@ DASHBOARD_PAGE = """<!doctype html>
 <html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LARY MODZ PROXY · DASHBOARD</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"><style>
 :root{--bg:#0f0d12;--panel:#18151e;--line:#2e2535;--muted:#a08fa8;--ink:#f5f3f7;--lime:#ff2d95}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif}.app{min-height:100vh;display:grid;grid-template-columns:230px 1fr}.side{padding:28px 20px;border-right:1px solid var(--line);background:#131018;display:flex;flex-direction:column}.brand{font-weight:900;letter-spacing:2px}.brand span{color:var(--lime)}.side nav{margin-top:64px;display:grid;gap:8px}.side nav div{padding:12px;color:var(--muted);font:700 10px monospace;letter-spacing:1.5px;text-transform:uppercase}.side nav div.active{background:var(--lime);color:#1a0a12}.side-foot{margin-top:auto;color:#6b5a70;font:10px monospace;line-height:1.7}.main{padding:34px 42px;max-width:1180px;width:100%}.top{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:30px;border-bottom:1px solid var(--line)}.top h1{margin:8px 0 0;font-size:36px;letter-spacing:-1.5px}.eyebrow{font:700 10px monospace;letter-spacing:2px;color:var(--lime)}.status{display:flex;gap:8px;align-items:center;color:#ff7ec0;font:700 10px monospace}.dot{width:7px;height:7px;background:#ff2d95;border-radius:50%;box-shadow:0 0 14px #ff2d95}.ip{margin:28px 0;display:flex;align-items:center;gap:12px;padding:15px 18px;background:#16131c;border:1px solid var(--line);font:12px monospace;color:#c8b9d0}.ip span:first-of-type{flex:1}.eye{border:0;background:none;color:var(--muted);cursor:pointer}.tag{padding:5px 8px;color:#1a0a12;background:var(--lime);font:800 9px monospace}.section-title{display:flex;align-items:center;gap:10px;margin:28px 0 12px;font:800 11px monospace;letter-spacing:2px;color:#b9a8c0}.section-title:after{content:"";height:1px;background:var(--line);flex:1}.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.control{display:flex;align-items:center;gap:14px;background:var(--panel);border:1px solid var(--line);padding:17px;cursor:pointer;transition:.2s}.control:hover{border-color:#c2186b;transform:translateY(-2px)}.control.disabled{cursor:pointer}.control.disabled:hover{border-color:#c2186b;transform:translateY(-2px)}.control.visual-option.is-on{border-color:var(--lime);background:#2a1525}.control.visual-option.is-on .icon{background:var(--lime);color:#1a0a12}.control.visual-option.is-on .sw{background:var(--lime)}.control.visual-option.is-on .sw .th{margin-left:16px;background:#1a0a12}.icon{width:34px;height:34px;display:grid;place-items:center;background:#2a1a28;color:var(--lime)}.info{flex:1}.name{font-size:12px;font-weight:800}.desc{color:var(--muted);font:10px monospace;margin-top:5px}.sw{width:34px;height:18px;border-radius:20px;background:#322a38;padding:2px}.sw .th{width:14px;height:14px;border-radius:50%;background:#8a7a90;transition:.2s}.sw.on{background:var(--lime)}.sw.on .th{margin-left:16px;background:#1a0a12}.bottom{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);color:#6b5a70;font:10px monospace}@media(max-width:760px){body{overflow-x:hidden}.app{grid-template-columns:1fr}.side{border-right:0;border-bottom:1px solid var(--line);padding:18px 14px}.side nav{margin-top:18px;grid-template-columns:repeat(3,1fr);gap:5px}.side nav div{min-height:44px;display:flex;align-items:center;justify-content:center;padding:8px 4px;text-align:center;font-size:9px}.side-foot{display:none}.main{padding:22px 14px}.top h1{font-size:28px}.top{align-items:center}.status{font-size:9px}.ip{padding:14px 12px;min-height:24px}.controls{grid-template-columns:1fr;gap:10px}.control{min-height:64px;padding:14px}.name{font-size:12px}}
 </style></head><body><main class="app"><aside class="side"><div class="brand"><i class="fa-solid fa-bolt"></i> LARY MODZ<span>PROXY</span></div><nav><div class="active"><i class="fa-solid fa-grid-2"></i> Overview</div><div><i class="fa-solid fa-crosshairs"></i> Aim</div><div><i class="fa-solid fa-sliders"></i> Modules</div></nav><div class="side-foot">SESSION ACTIVE<br>CONTROL NODE / 01</div></aside><section class="main"><header class="top"><div><div class="eyebrow">USER CONSOLE</div><h1>Dashboard</h1></div><div class="status"><i class="dot"></i> ONLINE</div></header><div class="ip"><i class="fa-solid fa-network-wired"></i><span id="ipDisplay">CARREGANDO...</span><button class="eye" id="ipToggle" onclick="toggleIpVisibility()" title="Ocultar IP"><i class="fa-solid fa-eye"></i></button><b class="tag">AUTHORIZED</b></div><div class="section-title">AIM MODULES</div><div class="controls"><div class="control" onclick="toggle('hs_neck')"><div class="icon"><i class="fa-solid fa-crosshairs"></i></div><div class="info"><div class="name">HS PESCOÇO</div><div class="desc">PRECISION TARGET</div></div><div class="sw" id="sw_hs_neck"><div class="th"></div></div></div><div class="control" onclick="toggle('hs_chest')"><div class="icon"><i class="fa-solid fa-bullseye"></i></div><div class="info"><div class="name">HS PEITO</div><div class="desc">PRECISION TARGET</div></div><div class="sw" id="sw_hs_chest"><div class="th"></div></div></div><div class="control visual-option" onclick="toggleVisual(this)"><div class="icon"><i class="fa-solid fa-crosshairs"></i></div><div class="info"><div class="name">PRECISÃO</div><div class="desc">PRECISION TARGET</div></div><div class="sw"><div class="th"></div></div></div><div class="control visual-option" onclick="toggleVisual(this)"><div class="icon"><i class="fa-solid fa-arrow-up"></i></div><div class="info"><div class="name">HS ALTO</div><div class="desc">PRECISION TARGET</div></div><div class="sw"><div class="th"></div></div></div><div class="control visual-option" onclick="toggleVisual(this)"><div class="icon"><i class="fa-solid fa-bullseye"></i></div><div class="info"><div class="name">
-HS ALTO + NECK</div><div class="desc">PRECISION TARGET</div></div><div class="sw"><div class="th"></div></div></div><div class="control visual-option" onclick="toggleVisual(this)"><div class="icon"><i class="fa-solid fa-expand"></i></div><div class="info"><div class="name">HOLOGRAMA</div><div class="desc">PRECISION TARGET</div></div><div class="sw"><div class="th"></div></div></div></div><div class="section-title">MOVEMENT & CONFIG</div><div class="controls"><div class="control" onclick="toggle('backjump_v1')"><div class="icon"><i class="fa-solid fa-arrow-up"></i></div><div class="info"><div class="name">BACKJUMP</div><div class="desc">MOVEMENT MODULE</div></div><div class="sw" id="sw_backjump_v1"><div class="th"></div></div></div><div class="control" onclick="toggle('high_sensi')"><div class="icon"><i class="fa-solid fa-sliders"></i></div><div class="info"><div class="name">SENSI ALTA</div><div class="desc">CONTROL PROFILE</div></div><div class="sw" id="sw_high_sensi"><div class="th"></div></div></div><div class="control" onclick="toggle('zig_zag_move')"><div class="icon"><i class="fa-solid fa-arrows-left-right"></i></div><div class="info"><div class="name">ZIG ZAG</div><div class="desc">MOVEMENT MODULE</div></div><div class="sw" id="sw_zig_zag_move"><div class="th"></div></div></div><div class="control" onclick="toggle('speed_player')"><div class="icon"><i class="fa-solid fa-gauge-high"></i></div><div class="info"><div class="name">SPEED PLAYER</div><div class="desc">MOVEMENT MODULE</div></div><div class="sw" id="sw_speed_player"><div class="th"></div></div></div></div><div class="bottom">LEAKS BYPASS · CONTROLLED SESSION</div></section></main><div id="toast" style="position:fixed;bottom:24px;right:24px;padding:12px 16px;background:#ff2d95;color:#1a0a12;font:800 11px monospace;opacity:0;transition:.2s"></div><script>
-const names={hs_neck:'HS PESCOÇO',hs_chest:'HS PEITO',backjump_v1:'BACKJUMP',high_sensi:'SENSI ALTA',zig_zag_move:'ZIG ZAG',speed_player:'SPEED PLAYER'};
-const featureMap={hs_neck:'HS_NECK',hs_chest:'HS_CHEST',backjump_v1:'BACKJUMPV1',high_sensi:'HIGH_SENSI',zig_zag_move:'ZIG_ZAG_MOVE',speed_player:'RUN_SPEED_575'};
+HS ALTO + NECK</div><div class="desc">PRECISION TARGET</div></div><div class="sw"><div class="th"></div></div></div><div class="control visual-option" onclick="toggleVisual(this)"><div class="icon"><i class="fa-solid fa-expand"></i></div><div class="info"><div class="name">HOLOGRAMA</div><div class="desc">PRECISION TARGET</div></div><div class="sw"><div class="th"></div></div></div></div><div class="section-title">MOVEMENT & CONFIG</div><div class="controls"><div class="control" onclick="toggle('backjump_v1')"><div class="icon"><i class="fa-solid fa-arrow-up"></i></div><div class="info"><div class="name">BACKJUMP</div><div class="desc">MOVEMENT MODULE</div></div><div class="sw" id="sw_backjump_v1"><div class="th"></div></div></div><div class="control" onclick="toggle('high_sensi')"><div class="icon"><i class="fa-solid fa-sliders"></i></div><div class="info"><div class="name">SENSI ALTA</div><div class="desc">CONTROL PROFILE</div></div><div class="sw" id="sw_high_sensi"><div class="th"></div></div></div><div class="control" onclick="toggle('zig_zag_move')"><div class="icon"><i class="fa-solid fa-arrows-left-right"></i></div><div class="info"><div class="name">ZIG ZAG</div><div class="desc">MOVEMENT MODULE</div></div><div class="sw" id="sw_zig_zag_move"><div class="th"></div></div></div><div class="control" onclick="toggle('RUN_SPEED_575')"><div class="icon"><i class="fa-solid fa-gauge-high"></i></div><div class="info"><div class="name">SPEED PLAYER</div><div class="desc">MOVEMENT MODULE</div></div><div class="sw" id="sw_RUN_SPEED_575"><div class="th"></div></div></div></div><div class="bottom">LEAKS BYPASS · CONTROLLED SESSION</div></section></main><div id="toast" style="position:fixed;bottom:24px;right:24px;padding:12px 16px;background:#ff2d95;color:#1a0a12;font:800 11px monospace;opacity:0;transition:.2s"></div><script>
+const names={hs_neck:'HS PESCOÇO',hs_chest:'HS PEITO',backjump_v1:'BACKJUMP',high_sensi:'SENSI ALTA',zig_zag_move:'ZIG ZAG',RUN_SPEED_575:'SPEED PLAYER'};
+const featureMap={hs_neck:'HS_NECK',hs_chest:'HS_CHEST',backjump_v1:'BACKJUMPV1',high_sensi:'HIGH_SENSI',zig_zag_move:'ZIG_ZAG_MOVE',RUN_SPEED_575:'RUN_SPEED_575'};
 function toast(message,error=false){const t=document.getElementById('toast');t.textContent=message;t.style.background=error?'#ff5d7d':'#ff2d95';t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2200)}
 function setSwitch(feature,value){const el=document.getElementById('sw_'+feature);if(el)el.className='sw'+(value?' on':'')}
 async function readJson(response){const text=await response.text();let data={};try{data=text?JSON.parse(text):{}}catch(_){throw new Error('Resposta inválida do servidor ('+response.status+')')}if(!response.ok||data.success===false)throw new Error(data.error||('Erro HTTP '+response.status));return data}
