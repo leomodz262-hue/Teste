@@ -609,6 +609,7 @@ ADMIN_DASHBOARD = """<!doctype html>
   </main>
 </div>
 </body></html>"""
+
 def get_public_ip():
     try:
         response = requests.get('https://api.ipify.org', timeout=5)
@@ -619,7 +620,6 @@ def get_public_ip():
             return response.text.strip()
         except:
             return "Não foi possível obter o IP público"
-
 if __name__ == "__main__":
     load_data()
     port = int(os.environ.get('PORT', 10000))
@@ -628,9 +628,9 @@ if __name__ == "__main__":
     print("  LEO MDZ PROXY ADMIN PANEL")
     print("="*50)
     print(f"  Porta do servidor: {port}")
-    print(f"  URL pública: https://leomdzproxy-production.up.railway.app")
-    print(f"  Admin     : /Po7eO")
-    print(f"  Status    : Rodando")
+    print("  URL pública: https://leomdzproxy-production.up.railway.app")
+    print("  Admin     : /Po7eO")
+    print("  Status    : Rodando")
     print("="*50 + "\n")
 
-    app.run(host="0.0.0.0", port=port, debug=False,
+    app.run(host="0.0.0.0", port=port, debug=False)
