@@ -408,7 +408,7 @@ def api_status():
 @app.route('/api/toggle', methods=['POST'])
 def api_toggle():
     client_ip = get_client_ip()
-    data = request.json
+    data = request.get_json(silent=True) or {}
     feature = data.get('feature')
     value = data.get('value')
 
@@ -418,12 +418,15 @@ def api_toggle():
         'backjump_v1': 'BACKJUMPV1',
         'high_sensi': 'HIGH_SENSI',
         'zig_zag_move': 'ZIG_ZAG_MOVE',
-        'run_speed_575': 'RUN_SPEED_575'
+        'speed_player': 'RUN_SPEED_575',
+        'run_speed_575': 'RUN_SPEED_575',
     }
 
     config_key = feature_map.get(feature)
-    if not config_key:
-        return jsonify({"error": "RECURSO INVÁLIDO"}), 400
+    if not config_key or config_key not in DEFAULT_CONFIG:
+        return jsonify({"success": False, "error": "RECURSO INVÁLIDO"}), 400
+    if not isinstance(value, bool):
+        return jsonify({"success": False, "error": "O valor precisa ser booleano"}), 400
 
     config = get_user_config(client_ip)
     config[config_key] = value
@@ -433,7 +436,9 @@ def api_toggle():
         "success": True,
         "ip": client_ip,
         "feature": feature,
-        "value": value
+        "config_key": config_key,
+        "value": value,
+        "config": config,
     })
 
 @app.route('/api/ip/check', methods=['GET'])
@@ -495,64 +500,6 @@ let actualIp='',ipVisible=true;async function loadIp(){try{const data=await read
 function toggleIpVisibility(){ipVisible=!ipVisible;document.getElementById('ipDisplay').textContent=ipVisible?actualIp:'•••.•••.•••.•••';document.getElementById('ipToggle').innerHTML=ipVisible?'<i class="fa-solid fa-eye"></i>':'<i class="fa-solid fa-eye-slash"></i>'}
 loadStatus();loadIp();
 </script></body></html>"""
-# ==================== API DE CONFIGURAÇÃO ====================
-FEATURE_ALIASES = {
-    "hs_neck": "HS_NECK",
-    "hs_chest": "HS_CHEST",
-    "backjump_v1": "BACKJUMPV1",
-    "high_sensi": "HIGH_SENSI",
-    "zig_zag_move": "ZIG_ZAG_MOVE",
-    "speed_player": "RUN_SPEED_575",
-    "HS_NECK": "HS_NECK",
-    "HS_CHEST": "HS_CHEST",
-    "BACKJUMPV1": "BACKJUMPV1",
-    "HIGH_SENSI": "HIGH_SENSI",
-    "ZIG_ZAG_MOVE": "ZIG_ZAG_MOVE",
-    "RUN_SPEED_575": "RUN_SPEED_575",
-}
-
-def _read_config():
-    config = dict(DEFAULT_CONFIG)
-    with CONFIG_LOCK:
-        try:
-            if CONFIG_FILE.exists():
-                saved = json.loads(CONFIG_FILE.read_text(encoding="utf-8"))
-                if isinstance(saved, dict):
-                    for key in DEFAULT_CONFIG:
-                        if key in saved:
-                            config[key] = bool(saved[key])
-        except (OSError, ValueError, TypeError):
-            pass
-    return config
-
-def _write_config(config):
-    with CONFIG_LOCK:
-        temporary = CONFIG_FILE.with_suffix(CONFIG_FILE.suffix + ".tmp")
-        temporary.write_text(json.dumps(config, ensure_ascii=False, indent=2), encoding="utf-8")
-        temporary.replace(CONFIG_FILE)
-
-def load_data():
-    return _read_config()
-
-@app.get("/api/status")
-def api_status():
-    return jsonify({"success": True, "config": _read_config()})
-
-@app.post("/api/toggle")
-def api_toggle():
-    payload = request.get_json(silent=True) or {}
-    requested = payload.get("feature")
-    value = payload.get("value")
-    if requested not in FEATURE_ALIASES:
-        return jsonify({"success": False, "error": "Função inválida"}), 400
-    if not isinstance(value, bool):
-        return jsonify({"success": False, "error": "O valor precisa ser booleano"}), 400
-    key = FEATURE_ALIASES[requested]
-    config = _read_config()
-    config[key] = value
-    _write_config(config)
-    return jsonify({"success": True, "feature": key, "value": value, "config": config})
-
 # ==================== MAIN ====================
 def get_public_ip():
     try:
