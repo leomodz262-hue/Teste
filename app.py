@@ -24,8 +24,8 @@ VER_PHP_URL = "https://version.ggwhitehawk.com/live/ver.php"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PORT = int(os.environ.get('PORT', 10000))
 
-ADMIN_USER = "thx"
-ADMIN_PASS = "00"
+ADMIN_USER = "LEOMDZ"
+ADMIN_PASS = "LARYMYBABY"
 
 # Data file paths
 DATA_FILE = os.path.join(BASE_DIR, "crx_data.json")
